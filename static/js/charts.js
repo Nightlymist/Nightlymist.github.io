@@ -74,6 +74,9 @@ function buildCharts(sample) {
     // 7. Create the yticks for the bar chart.
     // Hint: Get the the top 10 otu_ids and map them in descending order  
     //  so the otu_ids with the most bacteria are last. 
+    var sorted = hold.sort(function sortfunction(a,b){
+      return b-a;
+    });
 
     var yticks = otu_ids
 
@@ -88,5 +91,5 @@ function buildCharts(sample) {
     // 10. Use Plotly to plot the data with the layout. 
     
   });
-  console.log(sample)
+  console.log(sorted)
 }
