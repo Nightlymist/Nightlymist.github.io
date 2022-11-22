@@ -58,38 +58,108 @@ function buildCharts(sample) {
   // 2. Use d3.json to load and retrieve the samples.json file 
   d3.json("samples.json").then((data) => {
     // 3. Create a variable that holds the samples array. 
-    var sampleArray = data.sample;
+    var sampleArray = data.samples;
+
     // 4. Create a variable that filters the samples for the object with the desired sample number.
     var filterSample = sampleArray.filter(samObj => samObj.id == sample);
     //  5. Create a variable that holds the first sample in the array.
     var firstSample = filterSample[0];
 
     // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.
-    var hold = {
-      "otu_ids": [],
-      "otu_labels": [],
-      "sample_values": []
-    }
+    var otu_ids = firstSample["otu_ids"];
+    var otu_labels = firstSample["otu_labels"];
+    var sample_values = firstSample["sample_values"];
 
     // 7. Create the yticks for the bar chart.
     // Hint: Get the the top 10 otu_ids and map them in descending order  
     //  so the otu_ids with the most bacteria are last. 
-    var sorted = hold.sort(function sortfunction(a,b){
-      return b-a;
-    });
-
-    var yticks = otu_ids
+    var datapoints = [otu_ids, otu_labels, sample_values];
+  
+    var sorted = datapoints.sort((a, b) => b[0]-a[0]);
+    sorted = [sorted[0].slice(0,10), sorted[1].slice(0,10), sorted[2].slice(0,10)];
+    yticks = sorted[0].map(e => "OTU " + e);
+    xticks = sorted[2];
 
     // 8. Create the trace for the bar chart. 
-    //var barData = [
-      
-    //];
-    // 9. Create the layout for the bar chart. 
-    //var barLayout = {
-     
-    //};
+    var trace = {
+      x: xticks.reverse(),
+      y: yticks.reverse(),
+      text: sorted[1].reverse(),
+      type: "bar",
+      orientation: 'h'
+    }
+    var barData = [trace];
+    // 9. Create the layout for the bar chasrt. 
+    var barLayout = {
+      title: "Top 10 Bacteria Cultures Found"
+    };
     // 10. Use Plotly to plot the data with the layout. 
+    Plotly.newPlot("bar", barData, barLayout)
     
+    console.log(sorted)
+
+    // 1. Create the trace for the bubble chart.
+    var trace = {
+      x: otu_ids,
+      y: sample_values,
+      text: otu_labels,
+      mode: 'markers',
+      marker: {
+        size: sample_values,
+        colorscale: "YlGnBu",
+        color: otu_ids
+      }
+    }
+    var bubbleData = [trace];
+
+    // 2. Create the layout for the bubble chart.
+    var bubbleLayout = {
+      title: 'Bacteria Cultures Per Sample',
+      xaxis: {title: "OTU ID"},
+      showlegend: false,
+      height: 600,
+      width: 1200
+
+    };
+    // 3. Use Plotly to plot the data with the layout.
+    Plotly.newPlot("bubble", bubbleData, bubbleLayout);
+
+    // 1. Create a variable that filters the metadata array for the object with the desired sample number.
+    var resultArray = data.metadata.filter(sampleObj => sampleObj.id == sample);
+
+    // 2. Create a variable that holds the first sample in the metadata array.
+    var result = resultArray[0];
+    // 3. Create a variable that holds the washing frequency.
+    var wfreq = parseFloat(result["wfreq"]);
+    console.log(typeof(wfreq))
+    
+    // 4. Create the trace for the gauge chart.
+    var trace = {
+      value: wfreq,
+      type: "indicator",
+      mode: "gauge+number",
+      title: {text: "<span style='font-weight: bold'> Belly Button Washing Frequency</span><br>Scrubs per Week"},
+      gauge: {
+        axis: {range: [null, 10]},
+        steps: [
+          {range: [0,2], color: "red"},
+          {range: [2,4], color: "orange"},
+          {range: [4,6], color: "yellow"},
+          {range: [6,8], color: "lightgreen"},
+          {range: [8,10], color: "green"}
+        ],
+        bar: {color: "black"}
+      }
+    }
+    var gaugeData = [trace];
+    
+    // 5. Create the layout for the gauge chart.
+    var gaugeLayout = { 
+     width: 600,
+     height: 600,
+     margin: { t: 0, b: 0 }
+    };
+    // 6. Use Plotly to plot the gauge data and layout.
+    Plotly.newPlot("gauge", gaugeData, gaugeLayout);
   });
-  console.log(sorted)
 }

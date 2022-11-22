@@ -9,13 +9,13 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 
-<body>
-
+<body class="bg-dark">
   <div class="container">
     <div class="row">
       <div class="col-md-12 jumbotron text-center">
         <h1>Belly Button Biodiversity Dashboard</h1>
         <p>Use the interactive charts below to explore the dataset</p>
+        <p>The dataset is currently showing the volunteer that is assigned to an id number to not disclose the information of the volunteer. Currently we are trying to explore more of the possibility of having burgers that taste like meat without being meat through the enzymes of volunteer's belly button</p>
       </div>
     </div>
     <div class="row">
@@ -33,14 +33,17 @@
         </div>
       </div>
       <div class="col-md-5">
+        <h4>This bar graph demonstrate the top 10 bacteria that is present in the belly botton at the time of the sample.</h4>
         <div id="bar"></div>
       </div>
       <div class="col-md-5">
+        <h4>This gauge shows the amount of times per week that the volunteer washes their belly botton.</h4>
         <div id="gauge"></div>
       </div>
     </div>
     <div class="row">
       <div class="col-md-12">
+        <h4>This bubble chart is showing all of the bacteria and the amount of bacteria is present in the belly button</h4>
         <div id="bubble"></div>
       </div>
     </div>
@@ -50,6 +53,7 @@
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="static/js/plots.js"></script>
   <script src="static/js/charts.js"></script>
+  <script>document.body.style.background = "rgb(204, 255, 255" </script> 
 
 </body>
 
